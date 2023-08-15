@@ -7,7 +7,6 @@ import java.net.InetSocketAddress;
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) throws IOException {
-
         int port = 8080;
         String contextPath = "/api";
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
