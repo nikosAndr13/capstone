@@ -5,7 +5,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 public class Postgres {
     public static Connection getConnection() throws SQLException {
         Dotenv dotenv = Dotenv.load();
-        final String url = dotenv.get("urls");
+        final String url = dotenv.get("URLS");
         final String DB_USER = dotenv.get("DB_USER");
         final String DB_PASSWORD = dotenv.get("DB_PASSWORD");
 
