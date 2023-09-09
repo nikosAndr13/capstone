@@ -26,6 +26,9 @@ public class BlockUser {
             }
 
         } finally {
+            if (connection != null) {
+                connection.close();
+            }
           System.out.println("No new connection added");
         }
 
@@ -48,6 +51,9 @@ public class BlockUser {
             // Close the statement to free up connections and prevent resource leaks
             if (resetAttemptsStatement != null) {
                 resetAttemptsStatement.close();
+            }
+            if (connection != null) {
+                connection.close();
             }
         }
     }

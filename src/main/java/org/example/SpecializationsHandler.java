@@ -94,9 +94,6 @@ public class SpecializationsHandler implements  HttpHandler{
             if (statement != null) {
                 statement.close();
             }
-            if (connection != null) {
-                connection.close();
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

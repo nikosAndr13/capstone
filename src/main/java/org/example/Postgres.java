@@ -1,17 +1,15 @@
 package org.example;
 
 import java.sql.*;
-import io.github.cdimascio.dotenv.Dotenv;
+
 public class Postgres {
     public static Connection getConnection() throws SQLException {
-        Dotenv dotenv = Dotenv.load();
-        final String url = dotenv.get("URLS");
-        final String DB_USER = dotenv.get("DB_USER");
-        final String DB_PASSWORD = dotenv.get("DB_PASSWORD");
-
+        String URLS = System.getenv("URLS");
+        String DB_USER = System.getenv("DB_USER");
+        String DB_PASSWORD = System.getenv("DB_PASSWORD");
         Connection connection;
         try {
-            connection = DriverManager.getConnection(url, DB_USER, DB_PASSWORD);
+            connection = DriverManager.getConnection(URLS, DB_USER, DB_PASSWORD);
             System.out.println("Connected to the database successfully!");
         } catch (SQLException e) {
             System.err.println("Error connecting to the database: " + e.getMessage());

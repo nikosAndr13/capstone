@@ -35,6 +35,9 @@ public class CreateProfessionalHandler implements HttpHandler {
             String password = CreateProfessionalHandler.JsonUtils.getPasswordHash();
             Integer specializationid = CreateProfessionalHandler.JsonUtils.getSpecializationId();
             String addUserQuery = "INSERT INTO public.\"Professionals\" (name, email, password, specializationid) VALUES (?,?,?,?)";
+
+            String response; // Declare the response variable outside the try-catch block
+
             try {
                 connection = Postgres.getConnection();
                 statement = connection.prepareStatement(addUserQuery);
@@ -43,21 +46,23 @@ public class CreateProfessionalHandler implements HttpHandler {
                 statement.setString(3, passwordHash.hashPassword(password));
                 statement.setInt(4, specializationid);
                 statement.executeUpdate();
+
+                exchange.getResponseHeaders().set("Content-Type", "application/json");
+                response = "Created new account"; // Set the success response message
+                exchange.sendResponseHeaders(200, response.length());
+
             } catch (SQLException e) {
                 e.printStackTrace();
                 // Unique constraint violation error
-                String response = "User with this email already exists.";
+                response = "User with this email already exists.";
                 exchange.sendResponseHeaders(400, response.length());
-                OutputStream outputStream = exchange.getResponseBody();
-                outputStream.write(response.getBytes());
-                outputStream.close();
             }
 
-            exchange.getResponseHeaders().set("Content-Type", "application/json");
-            exchange.sendResponseHeaders(200, requestBody.length());
+            // Send the response outside of the try-catch block
             OutputStream outputStream = exchange.getResponseBody();
-            outputStream.write(requestBody.getBytes());
+            outputStream.write(response.getBytes());
             outputStream.close();
+
         } else {
             String response = "CreateUserHandler only accepts POST requests";
             exchange.sendResponseHeaders(405, response.length());
