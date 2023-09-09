@@ -29,9 +29,6 @@ public class getUserId {
         } finally {
             // Close the database resources to free up connections and prevent resource
             // leaks
-            if (connection != null) {
-                connection.close();
-            }
             if (resultSet != null) {
                 resultSet.close();
             }
