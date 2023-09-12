@@ -10,7 +10,7 @@ public class Main {
         int port = 8080;
         String contextPath = "/api";
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
-        server.createContext(contextPath + "/users", new UsersHandler());
+        server.createContext(contextPath + "/professionals", new ProfessionalsHandler());
         server.createContext(contextPath + "/users/create", new CreateUserHandler());
         server.createContext(contextPath + "/users/login", new SignInHandler());
         server.createContext(contextPath + "/professional/create", new CreateProfessionalHandler());
