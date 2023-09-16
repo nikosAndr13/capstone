@@ -7,15 +7,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 public class ProfessionalsHandler implements  HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
+        Headers headers = exchange.getResponseHeaders();
+        headers.set("Access-Control-Allow-Origin", "http://localhost:3000");
+        headers.set("Access-Control-Allow-Methods", "POST, OPTIONS");
+        headers.set("Access-Control-Allow-Headers", "Content-Type");
         if ("OPTIONS".equals(exchange.getRequestMethod())) {
             handleOptionsRequest(exchange);
         } else if ("GET".equals(exchange.getRequestMethod())) {
+            String queryString = exchange.getRequestURI().getQuery();
+            Map<String, String> queryParams = parseQueryParameters(queryString);
+
+            // Retrieve the "limit" and "offset" parameters (add error handling)
+            String limitParam = queryParams.get("limit");
+
+            int limit = Integer.parseInt(limitParam);
             Connection connection = null;
             Statement statement = null;
             ResultSet rs = null;
-
             try {
                 connection = Postgres.getConnection();
                 statement = connection.createStatement();
@@ -25,7 +37,8 @@ public class ProfessionalsHandler implements  HttpHandler {
                         "S.specialization AS specialization,\n" +
                         "\"Calendly_Link\" as calendly\n" +
                         "FROM public.\"Professionals\" P\n" +
-                        "INNER JOIN public.\"specializations\" S ON P.specializationid = S.id;");
+                        "INNER JOIN public.\"specializations\" S ON P.specializationid = S.id" +
+                        " LIMIT "+ limit + ";");
 
                 List<ProfessionalsHandler.User> userList = new ArrayList<>();
                 while (rs.next()) {
@@ -90,6 +103,20 @@ public class ProfessionalsHandler implements  HttpHandler {
             this.specialization = specialization;
             this.calendly = calendly;
         }
+    }
+
+    private Map<String, String> parseQueryParameters(String queryString) {
+        Map<String, String> queryParams = new HashMap<>();
+        if (queryString != null) {
+            String[] params = queryString.split("&");
+            for (String param : params) {
+                String[] keyValue = param.split("=");
+                if (keyValue.length == 2) {
+                    queryParams.put(keyValue[0], keyValue[1]);
+                }
+            }
+        }
+        return queryParams;
     }
 
     private static void closeResources(Connection connection, Statement statement, ResultSet rs) {
