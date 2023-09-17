@@ -31,6 +31,13 @@ public class ProfessionalsHandler implements  HttpHandler {
             try {
                 connection = Postgres.getConnection();
                 statement = connection.createStatement();
+
+                ResultSet totalRowsResult = statement.executeQuery("SELECT COUNT(*) AS total_rows FROM public.\"Professionals\"");
+                int totalRows = 0;
+                if (totalRowsResult.next()) {
+                    totalRows = totalRowsResult.getInt("total_rows");
+                }
+
                 rs = statement.executeQuery("SELECT \n" +
                         "P.name,\n" +
                         "P.email,\n" +
@@ -51,8 +58,12 @@ public class ProfessionalsHandler implements  HttpHandler {
                     userList.add(user);
                 }
 
+                Map<String, Object> responseMap = new HashMap<>();
+                responseMap.put("totalRows", totalRows); // Include the total number of rows
+                responseMap.put("data", userList);
+
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                String json = gson.toJson(userList);
+                String json = gson.toJson(responseMap);
 
                 System.out.println(json);
 
