@@ -17,7 +17,7 @@ public class CreateProfessionalHandler implements HttpHandler {
     public void handle(@NotNull HttpExchange exchange) throws IOException {
 
         Headers headers = exchange.getResponseHeaders();
-        headers.set("Access-Control-Allow-Origin", "http://localhost:3000");
+        headers.set("Access-Control-Allow-Origin", "https://capstone-project-liart-one.vercel.app/");
         headers.set("Access-Control-Allow-Methods", "POST, OPTIONS");
         headers.set("Access-Control-Allow-Headers", "Content-Type");
 
