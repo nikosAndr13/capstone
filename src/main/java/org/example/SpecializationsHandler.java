@@ -61,7 +61,7 @@ public class SpecializationsHandler implements  HttpHandler{
 
     private void handleOptionsRequest(HttpExchange exchange) throws IOException {
         Headers headers = exchange.getResponseHeaders();
-        headers.set("Access-Control-Allow-Origin", "http://localhost:3000");
+        headers.set("Access-Control-Allow-Origin", "https://capstone-project-liart-one.vercel.app/");
         headers.set("Access-Control-Allow-Methods", "GET, OPTIONS");
         headers.set("Access-Control-Allow-Headers",
                 "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
